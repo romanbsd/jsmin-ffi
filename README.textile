@@ -1,0 +1,31 @@
+h2. FFI Javascript minifier
+
+h3. Description
+
+This library was created in order to provide a reasonably fast Javascript
+minifier on JRuby platform.
+Both native Java and Ruby implementations were found to be in several orders
+of magnitude slower.
+The only change from the original C implementation, is that it was changed
+to C++ (in order to make global variables become instance variables),
+and it works with buffers rather than stdin/stdout now.
+
+h3. Synopsis
+
+ input = IO.read('prototype.js')
+ begin
+   output = Jsmin.process!(input)
+   File.open('output.js', 'w') {|f| f.write(output)}
+ rescue Jsmin::ParseException => e
+   $stderr.puts "Cannot minify: #{e}"
+ end
+
+h3. Bugs
+
+The memory allocated in the C++ code might not be freed.
+It depends on how FFI handles the returned char*.
+
+h3. See also
+
+For the original implementation, please see:
+http://www.crockford.com/javascript/jsmin.html
