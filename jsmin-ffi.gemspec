@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
      "ext/extconf.rb",
      "ext/jsmin.cpp",
      "ext/jsmin.h",
-     "ext/jsmin_wrap.c",
      "lib/jsmin.rb"
   ]
   s.homepage = %q{http://github.com/romanbsd/jsmin-ffi}
