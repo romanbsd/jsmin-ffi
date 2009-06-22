@@ -110,6 +110,7 @@ int Jsmin::next()
                     }
                     break;
                 case 0:
+                    free(output_buf);
                     throw("!Unterminated comment");
                 }
             }
@@ -148,6 +149,7 @@ void Jsmin::action(int d)
                     theA = get();
                 }
                 if (theA == 0) {
+                    free(output_buf);
                     throw("!Unterminated string literal");
                 }
             }
@@ -171,6 +173,7 @@ void Jsmin::action(int d)
                     theA = get();
                 }
                 if (theA == 0) {
+                    free(output_buf);
                     throw("!Unterminated Regular Expression literal");
                 }
 	        output_buf[index_out++] = theA;
