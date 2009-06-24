@@ -281,7 +281,7 @@ extern "C" {
       out = m->minify(in);
     }
     catch (char const *e) {
-      out = (char*) e;
+      out = strdup(e);
     }
     delete(m);
     return out;

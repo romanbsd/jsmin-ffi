@@ -21,6 +21,11 @@ static VALUE minify_wrap(VALUE self, VALUE arg)
 
 	res = minify(input);
 
+	if (res[0] == '!') {
+		free(res);
+		rb_raise(rb_eRuntimeError, "Parse error");
+	}
+
 	rv = rb_str_new2(res);
 	free(res);
 
