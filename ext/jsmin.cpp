@@ -60,6 +60,9 @@ int Jsmin::get()
 {
     int c = theLookahead;
     theLookahead = 0;
+    if ( index_in >= m_size ) {
+        return 0;
+    }
     if (c == 0) {
         c = input_buf[index_in++];
     }
@@ -200,8 +203,8 @@ char* Jsmin::minify(char *original)
       free(output_buf);
       output_buf = NULL;
     }
-
-    output_buf = (char *)malloc(sizeof(char) * strlen(original));
+    m_size = strlen(original);
+    output_buf = (char *)malloc(sizeof(char) * (m_size+1));
 
     theA = '\n';
     action(3);

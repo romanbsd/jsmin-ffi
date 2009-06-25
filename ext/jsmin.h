@@ -15,6 +15,7 @@ private:
   int index_out;
   char *input_buf;
   char *output_buf;
+  int m_size;
 
   int isAlphanum(int c);
   int get();
