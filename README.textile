@@ -18,7 +18,7 @@ h3. Synopsis
  begin
    output = JsminFFI.minify!(input)
    File.open('output.js', 'w') {|f| f.write(output)}
- rescue Jsmin::ParseException => e
+ rescue Jsmin::ParseError => e
    $stderr.puts "Cannot minify: #{e}"
  end
 </pre>
