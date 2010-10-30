@@ -1,1 +1,2 @@
-puts 'Using provided Makefile'
+require 'mkmf'
+create_makefile('Jsmin')

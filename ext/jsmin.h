@@ -5,6 +5,7 @@ class Jsmin
 {
 public:
   Jsmin();
+  ~Jsmin();
   char* minify(char *);
 
 private:

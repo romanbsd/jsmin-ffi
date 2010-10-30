@@ -12,17 +12,29 @@ and it works with buffers rather than stdin/stdout now.
 
 h3. Synopsis
 
+ require 'jsmin_ffi'
  input = IO.read('prototype.js')
  begin
-   output = Jsmin.process!(input)
+   output = JsminFFI.minify!(input)
    File.open('output.js', 'w') {|f| f.write(output)}
  rescue Jsmin::ParseException => e
    $stderr.puts "Cannot minify: #{e}"
  end
 
+or use a native extension:
+
+ require 'Jsmin'
+ input = IO.read('jquery.js')
+ begin
+   output = Jsmin.minify(input)
+   File.open('output.js', 'w') {|f| f.write(output)}
+ rescue Jsmin::ParseError => e
+   $stderr.puts "Cannot minify: #{e}"
+ end
+
 h3. Bugs
 
-The memory allocated in the C++ code might not be freed.
+The memory allocated in the C++ code might not be freed when using FFI.
 It depends on how FFI handles the returned char*.
 
 h3. See also

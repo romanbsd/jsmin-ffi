@@ -7,9 +7,7 @@ begin
     gemspec.homepage = 'http://github.com/romanbsd/jsmin-ffi'
     gemspec.description = gemspec.summary
     gemspec.authors = ['Roman Shterenzon']
-    gemspec.extensions << 'ext/extconf.rb'
     gemspec.add_dependency('ffi', '>=0.3.5')
-    gemspec.files = FileList["[A-Z]*", "{ext,lib}/**/*"]
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

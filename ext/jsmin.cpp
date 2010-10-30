@@ -38,7 +38,11 @@ Jsmin::Jsmin()
   input_buf = NULL;
 }
 
-
+Jsmin::~Jsmin() {
+	if (output_buf) {
+		free(output_buf);
+	}
+}
 /* isAlphanum -- return true if the character is a letter, digit, underscore,
         dollar sign, or non-ASCII character.
 */
@@ -113,7 +117,6 @@ int Jsmin::next()
                     }
                     break;
                 case 0:
-                    free(output_buf);
                     throw("!Unterminated comment");
                 }
             }
@@ -152,7 +155,6 @@ void Jsmin::action(int d)
                     theA = get();
                 }
                 if (theA == 0) {
-                    free(output_buf);
                     throw("!Unterminated string literal");
                 }
             }
@@ -176,7 +178,6 @@ void Jsmin::action(int d)
                     theA = get();
                 }
                 if (theA == 0) {
-                    free(output_buf);
                     throw("!Unterminated Regular Expression literal");
                 }
 	        output_buf[index_out++] = theA;
@@ -281,7 +282,7 @@ extern "C" {
     char *out;
     Jsmin *m = new Jsmin();
     try {
-      out = m->minify(in);
+      out = strdup(m->minify(in));
     }
     catch (char const *e) {
       out = strdup(e);
