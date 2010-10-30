@@ -12,6 +12,7 @@ and it works with buffers rather than stdin/stdout now.
 
 h3. Synopsis
 
+<pre>
  require 'jsmin_ffi'
  input = IO.read('prototype.js')
  begin
@@ -20,9 +21,10 @@ h3. Synopsis
  rescue Jsmin::ParseException => e
    $stderr.puts "Cannot minify: #{e}"
  end
+</pre>
 
 or use a native extension:
-
+<pre>
  require 'Jsmin'
  input = IO.read('jquery.js')
  begin
@@ -31,6 +33,7 @@ or use a native extension:
  rescue Jsmin::ParseError => e
    $stderr.puts "Cannot minify: #{e}"
  end
+</pre>
 
 h3. Bugs
 
