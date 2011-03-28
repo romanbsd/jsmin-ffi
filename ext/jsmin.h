@@ -6,17 +6,17 @@ class Jsmin
 public:
   Jsmin();
   ~Jsmin();
-  char* minify(char *);
+  char* minify(const char *);
 
 private:
   int   theA;
   int   theB;
   int   theLookahead;
-  int index_in;
-  int index_out;
-  char *input_buf;
+  size_t index_in;
+  size_t index_out;
+  const char *input_buf;
   char *output_buf;
-  int m_size;
+  size_t m_size;
 
   int isAlphanum(int c);
   int get();

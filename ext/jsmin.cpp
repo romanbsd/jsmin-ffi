@@ -194,7 +194,7 @@ void Jsmin::action(int d)
         Most spaces and linefeeds will be removed.
 */
 
-char* Jsmin::minify(char *original)
+char* Jsmin::minify(const char *original)
 {
     input_buf = original;
     index_in = 0;
@@ -207,7 +207,7 @@ char* Jsmin::minify(char *original)
     m_size = strlen(original);
     output_buf = (char *)malloc(sizeof(char) * (m_size+1));
 
-    theA = '\n';
+    theA = ';';
     action(3);
     while (theA != 0) {
         switch (theA) {
@@ -277,17 +277,16 @@ char* Jsmin::minify(char *original)
 }
 
 extern "C" {
-  char* minify(char *in)
+  char* minify(const char *in)
   {
     char *out;
-    Jsmin *m = new Jsmin();
+    Jsmin m;
     try {
-      out = strdup(m->minify(in));
+      out = strdup(m.minify(in));
     }
     catch (char const *e) {
       out = strdup(e);
     }
-    delete(m);
     return out;
   }
 }
