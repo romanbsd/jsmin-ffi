@@ -1,5 +1,5 @@
 /* jsmin.c
-   2008-08-03
+   2011-01-22
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -33,7 +33,7 @@ Jsmin::Jsmin()
 {
   index_in = 0;
   index_out = 0;
-  theLookahead = 0;
+  theLookahead = EOF;
   output_buf = NULL;
   input_buf = NULL;
 }
@@ -63,14 +63,14 @@ int Jsmin::isAlphanum(int c)
 int Jsmin::get()
 {
     int c = theLookahead;
-    theLookahead = 0;
+    theLookahead = EOF;
     if ( index_in >= m_size ) {
-        return 0;
+        return EOF;
     }
-    if (c == 0) {
+    if (c == EOF) {
         c = input_buf[index_in++];
     }
-    if (c >= ' ' || c == '\n' || c == 0) {
+    if (c >= ' ' || c == '\n' || c == EOF) {
         return c;
     }
     if (c == '\r') {
@@ -116,7 +116,7 @@ int Jsmin::next()
                         return ' ';
                     }
                     break;
-                case 0:
+                case EOF:
                     throw("!Unterminated comment");
                 }
             }
@@ -140,21 +140,21 @@ void Jsmin::action(int d)
 {
     switch (d) {
     case 1:
-	output_buf[index_out++] = theA;
+        output_buf[index_out++] = theA;
     case 2:
         theA = theB;
         if (theA == '\'' || theA == '"') {
             for (;;) {
-	        output_buf[index_out++] = theA;
+                output_buf[index_out++] = theA;
                 theA = get();
                 if (theA == theB) {
                     break;
                 }
                 if (theA == '\\') {
-	            output_buf[index_out++] = theA;
+                    output_buf[index_out++] = theA;
                     theA = get();
                 }
-                if (theA == 0) {
+                if (theA == EOF) {
                     throw("!Unterminated string literal");
                 }
             }
@@ -166,21 +166,35 @@ void Jsmin::action(int d)
                             theA == '&' || theA == '|' || theA == '?' ||
                             theA == '{' || theA == '}' || theA == ';' ||
                             theA == '\n')) {
-	    output_buf[index_out++] = theA;
-	    output_buf[index_out++] = theB;
+            output_buf[index_out++] = theA;
+            output_buf[index_out++] = theB;
             for (;;) {
                 theA = get();
-                if (theA == '/') {
+                if (theA == '[') {
+                    for (;;) {
+                        output_buf[index_out++] = theA;
+                        theA = get();
+                        if (theA == ']') {
+                            break;
+                        }
+                        if (theA == '\\') {
+                            output_buf[index_out++] = theA;
+                            theA = get();
+                        }
+                        if (theA == EOF) {
+                            throw("!Unterminated set in Regular Expression literal");
+                        }
+                    }
+                } else if (theA == '/') {
                     break;
-                }
-                if (theA =='\\') {
-	            output_buf[index_out++] = theA;
+                } else if (theA =='\\') {
+                    output_buf[index_out++] = theA;
                     theA = get();
                 }
-                if (theA == 0) {
+                if (theA == EOF) {
                     throw("!Unterminated Regular Expression literal");
                 }
-	        output_buf[index_out++] = theA;
+                output_buf[index_out++] = theA;
             }
             theB = next();
         }
@@ -209,7 +223,7 @@ char* Jsmin::minify(const char *original)
 
     theA = ';';
     action(3);
-    while (theA != 0) {
+    while (theA != EOF) {
         switch (theA) {
         case ' ':
             if (isAlphanum(theB)) {
