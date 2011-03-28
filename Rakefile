@@ -10,5 +10,5 @@ begin
     gemspec.add_dependency('ffi', '>=0.3.5')
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
+Jeweler::RubygemsDotOrgTasks.new
