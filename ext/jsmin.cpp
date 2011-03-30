@@ -43,6 +43,12 @@ Jsmin::~Jsmin() {
 		free(output_buf);
 	}
 }
+
+int Jsmin::putc(int c, FILE *fp) {
+    output_buf[index_out++] = c;
+    return 1;
+}
+
 /* isAlphanum -- return true if the character is a letter, digit, underscore,
         dollar sign, or non-ASCII character.
 */
@@ -140,18 +146,18 @@ void Jsmin::action(int d)
 {
     switch (d) {
     case 1:
-        output_buf[index_out++] = theA;
+        putc(theA, stdout);
     case 2:
         theA = theB;
         if (theA == '\'' || theA == '"') {
             for (;;) {
-                output_buf[index_out++] = theA;
+                putc(theA, stdout);
                 theA = get();
                 if (theA == theB) {
                     break;
                 }
                 if (theA == '\\') {
-                    output_buf[index_out++] = theA;
+                    putc(theA, stdout);
                     theA = get();
                 }
                 if (theA == EOF) {
@@ -166,19 +172,19 @@ void Jsmin::action(int d)
                             theA == '&' || theA == '|' || theA == '?' ||
                             theA == '{' || theA == '}' || theA == ';' ||
                             theA == '\n')) {
-            output_buf[index_out++] = theA;
-            output_buf[index_out++] = theB;
+            putc(theA, stdout);
+            putc(theB, stdout);
             for (;;) {
                 theA = get();
                 if (theA == '[') {
                     for (;;) {
-                        output_buf[index_out++] = theA;
+                        putc(theA, stdout);
                         theA = get();
                         if (theA == ']') {
                             break;
                         }
                         if (theA == '\\') {
-                            output_buf[index_out++] = theA;
+                            putc(theA, stdout);
                             theA = get();
                         }
                         if (theA == EOF) {
@@ -188,13 +194,13 @@ void Jsmin::action(int d)
                 } else if (theA == '/') {
                     break;
                 } else if (theA =='\\') {
-                    output_buf[index_out++] = theA;
+                    putc(theA, stdout);
                     theA = get();
                 }
                 if (theA == EOF) {
                     throw("!Unterminated Regular Expression literal");
                 }
-                output_buf[index_out++] = theA;
+                putc(theA, stdout);
             }
             theB = next();
         }

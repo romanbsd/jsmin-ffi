@@ -23,5 +23,6 @@ private:
   int peek();
   int next();
   void action(int d);
+  int putc(int c, FILE *stream);
 };
 #endif
